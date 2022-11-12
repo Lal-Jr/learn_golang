@@ -33,6 +33,11 @@ func main() {
 		fmt.Print("Enter No. of Tickets: ")
 		fmt.Scan(&userTickets)
 
+		if userTickets > int(remainingTickets) {
+			fmt.Printf("Only %v tickets are available. Please verify input.", remainingTickets)
+			continue
+		}
+
 		remainingTickets -= uint(userTickets);
 		bookings = append(bookings,userFirstName + " " + userLastName)
 
