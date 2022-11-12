@@ -11,9 +11,7 @@ func main() {
 	var remainingTickets uint = 50
 	bookings := []string{}
 
-    fmt.Printf("Welcome to our %v booking application\n", conferenceName)
-    fmt.Printf("We have a total of %v tickets and %v are still available\n", conferenceTickets, remainingTickets)
-	fmt.Println("Get your tickets here to attend")
+	greetUser(conferenceName,conferenceTickets,remainingTickets)
 
 	for remainingTickets > 0 && len(bookings) < 50 {
 		var userFirstName string
@@ -33,27 +31,41 @@ func main() {
 		fmt.Print("Enter No. of Tickets: ")
 		fmt.Scan(&userTickets)
 
-		if userTickets > int(remainingTickets) {
-			fmt.Printf("Only %v tickets are available. Please verify input.", remainingTickets)
+		isValidName := len(userFirstName) > 2 && len(userLastName) > 2;
+		isValidEmail := strings.Contains(userEmail, "@");
+		isValidTicket := userTickets > 0 && userTickets <= int(remainingTickets);
+
+		if isValidName && isValidEmail && isValidTicket {
+			remainingTickets -= uint(userTickets);
+			bookings = append(bookings,userFirstName + " " + userLastName)
+
+			firstName := getFirstNames(bookings)
+
+			fmt.Printf("Thanks %v %v for booking %v tickets. You will receive your confirmation at %v.\n", userFirstName, userLastName, userTickets, userEmail)
+			fmt.Printf("%v tickets remaining for %v.\n", remainingTickets, conferenceName)
+			fmt.Printf("they are all the bookings: %v.\n",firstName)
+
+			if remainingTickets == 0 {
+				fmt.Printf("%v is sold out",conferenceName)
+				break
+			}
 			continue
 		}
-
-		remainingTickets -= uint(userTickets);
-		bookings = append(bookings,userFirstName + " " + userLastName)
-
-		firstNames := []string{}
-		for _,booking := range bookings {
-			var names = strings.Fields(booking)
-			firstNames = append(firstNames, names[0])
-		}
-
-		fmt.Printf("Thanks %v %v for booking %v tickets. You will receive your confirmation at %v.\n", userFirstName, userLastName, userTickets, userEmail)
-		fmt.Printf("%v tickets remaining for %v.\n", remainingTickets, conferenceName)
-		fmt.Printf("they are all the bookings: %v.\n",firstNames)
-
-		if remainingTickets == 0 {
-			fmt.Printf("%v is sold out",conferenceName)
-			break
-		}
+		fmt.Println("Invalid Name, Email or No. of Tickets")
 	}
+}
+
+func greetUser(confName string, confTicket int, remTicket uint){
+	fmt.Printf("Welcome to our %v booking application\n", confName)
+    fmt.Printf("We have a total of %v tickets and %v are still available\n", confTicket, remTicket)
+	fmt.Println("Get your tickets here to attend")
+}
+
+func getFirstNames(bookings []string) []string{
+	firstNames := []string{}
+	for _,booking := range bookings {
+		var names = strings.Fields(booking)
+		firstNames = append(firstNames, names[0])
+	}
+	return firstNames
 }
