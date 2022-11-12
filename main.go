@@ -45,5 +45,10 @@ func main() {
 		fmt.Printf("Thanks %v %v for booking %v tickets. You will receive your confirmation at %v.\n", userFirstName, userLastName, userTickets, userEmail)
 		fmt.Printf("%v tickets remaining for %v.\n", remainingTickets, conferenceName)
 		fmt.Printf("they are all the bookings: %v.\n",firstNames)
+
+		if remainingTickets == 0 {
+			fmt.Printf("%v is sold out",conferenceName)
+			break
+		}
 	}
 }
